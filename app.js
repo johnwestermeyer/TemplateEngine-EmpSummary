@@ -95,7 +95,8 @@ function init() {
             }
             else{
                 try {
-                    renderer.render(employees);
+                    let text = renderer.render(employees);
+                    writeToFile("index.html", text)
                 } catch (error) {
                     console.error(error);
                 }
@@ -106,6 +107,11 @@ function init() {
 }
     )
 
+}
+
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, (err) =>
+    err ? console.error(err) : console.log('Success!'));
 }
 
 
