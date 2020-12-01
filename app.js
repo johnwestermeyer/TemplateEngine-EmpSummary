@@ -40,7 +40,10 @@ const questions = [
     {
         type: "input",
         message: "What is the employee's name?",
-        name: "name"
+        name: "name",
+        validate: (ans) => {
+            return ans === "" ? "You must provide a name value" : true;
+        }
     },
     {
         type: "input",
