@@ -19,9 +19,23 @@ const employees = [];
 
 const questions = [
     {
-        type: "number",
+        type: "input",
         message: "What is the employee's ID number?",
-        name: "id"
+        name: "id",
+        validate: (ans) => {
+            let test = true;
+            for(let i = 0; i < employees.length; i++){
+                if(ans===employees[i].id){
+                    test = false;
+                }
+            }
+            if(isNaN(ans)){
+                console.log(`\nPlease Enter a Number Value`)
+            } else if(!test){
+                console.log(`\nPlease enter an original ID number`)
+            }
+            return !isNaN(ans) && test;
+        }
     },
     {
         type: "input",
@@ -40,7 +54,7 @@ const questions = [
         choices: ["Manager", "Engineer", "Intern"]
     },
     {
-        type: "number",
+        type: "input",
         message: "What is the manager's office number?",
         name: "officeNumber",
         when: (response) => {
