@@ -52,7 +52,7 @@ const questions = [
         message: "Whats it the employee's email address?",
         name: "email",
         validate: (ans) => {
-            //regex obviously not created by me but rather sourced from https://ui.dev/validate-email-address-javascript/
+            //regex obviously not created by me but rather sourced from https://ui.dev/validate-email-address-javascript/ (checks for valid email address)
             return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ans) ? "You must provide a valid email" : true;
         }
     },
@@ -68,6 +68,10 @@ const questions = [
         name: "officeNumber",
         when: (response) => {
             return response.role === "Manager"
+        },
+        validate: (ans) => {
+            //checks if office number is indeed a number
+            return !isNaN(ans) ? "Must be a number" : true;
         }
     },
     {
@@ -76,6 +80,10 @@ const questions = [
         name: "github",
         when: (response) => {
             return response.role === "Engineer"
+        },
+        validate: (ans) => {
+            //checks if answer is not an empty string
+            return ans = "" ? "You must provide a github username" : true;
         }
     },
     {
@@ -84,6 +92,10 @@ const questions = [
         name: "school",
         when: (response) => {
             return response.role === "Intern"
+        },
+        validate: (ans) => {            
+            //checks if answer is not an empty string
+            return ans = "" ? "You must provide a school name" : true;
         }
     }
 ]
