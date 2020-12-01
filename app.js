@@ -8,7 +8,9 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const render = require("./lib/htmlRenderer");
+const renderer = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
+const employees = [];
 
 
 
@@ -17,57 +19,92 @@ const render = require("./lib/htmlRenderer");
 
 const questions = [
     {
+        type: "number",
+        message: "What is the employee's ID number?",
+        name: "id"
+    },
+    {
         type: "input",
         message: "What is the employee's name?",
         name: "name"
     },
     {
         type: "input",
-        message: "Whats it their email address?",
+        message: "Whats it the employee's email address?",
         name: "email"
     },
     {
         type: "list",
-        message: "What is their job title?",
-        name: "title",
+        message: "What is the employee's job role?",
+        name: "role",
         choices: ["Manager", "Engineer", "Intern"]
-    }
-]
-
-const followUpManager = [
+    },
     {
         type: "number",
-        message: "What is their office number?",
-        name: "office"
+        message: "What is the manager's office number?",
+        name: "officeNumber",
+        when: (response) => {
+            return response.role === "Manager"
+        }
+    },
+    {
+        type: "input",
+        message: "What is the engineer's github username?",
+        name: "github",
+        when: (response) => {
+            return response.role === "Engineer"
+        }
+    },
+    {
+        type: "input",
+        message: "What is the intern's school?",
+        name: "school",
+        when: (response) => {
+            return response.role === "Intern"
+        }
     }
 ]
 
-const followUpEngineer = [
+const followUp = [
     {
-        type: "input",
-        message: "What is their github username?",
-        name: "github"
+        type: "confirm",
+        message: "Would you like to enter another employee?",
+        name: "cont"
     }
 ]
-
-const followUpIntern = [
-    {
-        type: "input",
-        message: "What is their school?",
-        name: "school"
-    }
-]
-S
 
 function init() {
     inquirer.prompt(questions).then((response) => {
-        if(response.title)
+        if(response.role === "Manager"){            
+            let emp = new Manager(response.name, response.id, 
+                response.email, response.role, response.officeNumber);        
+            employees.push(emp);
+        } else if (response.role === "Engineer"){
+            let emp = new Engineer(response.name, response.id, 
+                response.email, response.role, response.github);        
+            employees.push(emp);
+        } else{
+            let emp = new Intern(response.name, response.id, 
+                response.email, response.role, response.github);        
+            employees.push(emp);
+        }
 
-        try {            
-            writeToFile("index.html", text)
-          } catch (error) {
-            console.error(error);
-    }})
+        inquirer.prompt(followUp).then((response) => {
+            if(response.cont){
+                init();
+            }
+            else{
+                try {
+                    renderer.render(employees);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        })
+
+
+}
+    )
 
 }
 
