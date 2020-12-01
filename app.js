@@ -23,8 +23,9 @@ const questions = [
         message: "What is the employee's ID number?",
         name: "id",
         validate: (ans) => {
+             //checking if employee ID is in use or input is not a number
             let test = true;
-            for(let i = 0; i < employees.length; i++){
+            for(let i = 0; i < employees.length; i++){               
                 if(ans===employees[i].id){
                     test = false;
                 }
@@ -42,13 +43,18 @@ const questions = [
         message: "What is the employee's name?",
         name: "name",
         validate: (ans) => {
-            return ans === "" ? "You must provide a name value" : true;
+            //check if answer is not an empty string
+            return ans === "" ? "You must provide a name" : true;
         }
     },
     {
         type: "input",
         message: "Whats it the employee's email address?",
-        name: "email"
+        name: "email",
+        validate: (ans) => {
+            //regex obviously not created by me but rather sourced from https://ui.dev/validate-email-address-javascript/
+            return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ans) ? "You must provide a valid email" : true;
+        }
     },
     {
         type: "list",
