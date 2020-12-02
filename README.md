@@ -15,6 +15,8 @@
 ## Usage
 * In your terminal `node app.js` to run the application, respond to questions as requested, output files will be placed in output directory inside the application directory
 * example.mp4 is a video example of usage
+## Contributing
+* Accepting all forms of input/criticism
 ## Tests
 * Checked constructor generation with tests in test directory
 ## License
