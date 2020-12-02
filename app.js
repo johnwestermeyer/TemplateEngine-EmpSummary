@@ -123,7 +123,7 @@ function init() {
             employees.push(emp);
         } else{
             let emp = new Intern(response.name, response.id, 
-                response.email, response.github);        
+                response.email, response.school);        
             employees.push(emp);
         }
         //Continue? if yes run init again : else write to file
@@ -148,21 +148,41 @@ function init() {
     )
 
 }
-//writeToFile function is a function that writes to a file
+//writeToFile function is a function that writes to a file, also uses F A N C Y regex to give the file name
 function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err) =>
-    err ? console.error(err) : console.log('Success!'));
+    err ? console.error(err) : console.log(`${fileName.split(/[\\]+/).pop()} created!`));
 }
-//checking if output folder exists and if not creates it
+//checking if output folder exists and if not creates it with similar FaNcY regex as writeToFile
 function checkFolder(){
     if (!fs.existsSync(OUTPUT_DIR)) {
-        fs.mkdirSync(OUTPUT_DIR);
+        fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+        console.log(`${OUTPUT_DIR.split(/[\\]+/).pop()} directory created!`)
     }
 }
 //checking if external CSS exist and if not creates it
 function checkCSS(){
     if(!fs.existsSync(cssPath)){
-        writeToFile(cssPath, /* CSS GOES HERE */);
+        writeToFile(cssPath, `.team-heading{
+            background-color: forestgreen;
+            color: white;
+        }
+        
+        h3.card-title{
+            font-size: 20px;
+        }
+        
+        .employee-card{
+            border-color: black;
+        }
+        
+        .card-header{
+            border-bottom-color: black;
+        }
+        
+        .card-body{
+            background-color: rgb(45, 189, 45, .75);
+        }`);
     }
 }
 
