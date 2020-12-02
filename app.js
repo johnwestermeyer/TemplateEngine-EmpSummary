@@ -23,7 +23,7 @@ const questions = [
         message: "What is the employee's ID number?",
         name: "id",
         validate: (ans) => {
-             //checking if employee ID is in use or input is not a number
+             //checking if employee ID is in use, input is not a number or is an empty string
             let test = true;
             for(let i = 0; i < employees.length; i++){               
                 if(ans===employees[i].id){
@@ -33,9 +33,11 @@ const questions = [
             if(isNaN(ans)){
                 console.log(`\nPlease Enter a Number Value`)
             } else if(!test){
-                console.log(`\nPlease enter an original ID number`)
+                console.log(`\nPlease Enter an Original ID Number`)
+            } else if(ans===""){
+                console.log(`\nPlease Enter an ID Number`)
             }
-            return !isNaN(ans) && test;
+            return !isNaN(ans) && test && ans !== "";
         }
     },
     {
@@ -70,8 +72,8 @@ const questions = [
             return response.role === "Manager"
         },
         validate: (ans) => {
-            //checks if office number is indeed a number
-            return !isNaN(ans) ? "Must be a number" : true;
+            //checks if office number is indeed a number and not empty
+            return (isNaN(ans) || ans === "") ? "Must be a number" : true;
         }
     },
     {
@@ -83,7 +85,7 @@ const questions = [
         },
         validate: (ans) => {
             //checks if answer is not an empty string
-            return ans = "" ? "You must provide a github username" : true;
+            return ans === "" ? "You must provide a github username" : true;
         }
     },
     {
@@ -95,11 +97,11 @@ const questions = [
         },
         validate: (ans) => {            
             //checks if answer is not an empty string
-            return ans = "" ? "You must provide a school name" : true;
+            return ans === "" ? "You must provide a school name" : true;
         }
     }
 ]
-
+//Continue? question
 const followUp = [
     {
         type: "confirm",
@@ -123,7 +125,7 @@ function init() {
                 response.email, response.role, response.github);        
             employees.push(emp);
         }
-
+        //Continue? if yes run init again : else write to file
         inquirer.prompt(followUp).then((response) => {
             if(response.cont){
                 init();
@@ -131,7 +133,8 @@ function init() {
             else{
                 try {
                     let text = renderer.render(employees);
-                    writeToFile("index.html", text)
+                    checkFolder();                    
+                    writeToFile(outputPath, text)
                 } catch (error) {
                     console.error(error);
                 }
@@ -143,13 +146,17 @@ function init() {
     )
 
 }
-
+//writeToFile function is a function that writes to a file
 function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err) =>
     err ? console.error(err) : console.log('Success!'));
 }
-
-
+//checking if output folder exists and if not creates it :3
+function checkFolder(){
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR);
+    }
+}
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
