@@ -115,15 +115,15 @@ function init() {
     inquirer.prompt(questions).then((response) => {
         if(response.role === "Manager"){            
             let emp = new Manager(response.name, response.id, 
-                response.email, response.role, response.officeNumber);        
+                response.email, response.officeNumber);        
             employees.push(emp);
         } else if (response.role === "Engineer"){
             let emp = new Engineer(response.name, response.id, 
-                response.email, response.role, response.github);        
+                response.email, response.github);        
             employees.push(emp);
         } else{
             let emp = new Intern(response.name, response.id, 
-                response.email, response.role, response.github);        
+                response.email, response.github);        
             employees.push(emp);
         }
         //Continue? if yes run init again : else write to file
